@@ -1,7 +1,7 @@
 import java.util.HashMap;
 
 public class MusicController {
-	final int THRESHOLD = 1000;
+	final int THRESHOLD = 500;
 	final int MAX_FORCE = 4000;
 	int sensorWidth, sensorHeight;
 	
@@ -24,9 +24,10 @@ public class MusicController {
 		}
 
 		// define a square of note triggers
-		int[] scale = {60, 62, 64, 65, 67, 69, 71, 72, 74};	// C Major
-		createInstrument(0, 0, 3, 3, 9, 1, scale, 0);
-		createInstrument(0, 10, 3, 3, 9, 1, scale, 1);
+//		int[] scale = {60, 62, 64, 65, 67, 69, 71, 72, 74};	// C Major
+		int[] scale = {60, 62, 64, 67, 69};	// Pentatonic
+		createInstrument(0, 0, 2, 3, 10, 1, scale, 0);
+		createInstrument(0, 10, 2, 3, 10, 1, scale, 1);
 	}
 	
 	/* createSquareInstrument
@@ -40,9 +41,15 @@ public class MusicController {
 		int w = sbx*nbx;
 		int h = sby*nby;
 		int scaleIndex = 0;
+		int octave = 0;
 		for (int y=_y; y<_y+h; y+=sby) {
 			for (int x=_x; x<_x+w; x+=sbx) {
-				NoteBox nb = new NoteBox(channel, scale[scaleIndex++%scale.length]);
+				NoteBox nb = new NoteBox(channel, scale[scaleIndex++] + octave*12);
+				if (scaleIndex >= scale.length) {
+					scaleIndex=0;
+					octave++;
+				}
+				
 				for (int j=0; j<sby; j++) {
 					for (int i=0; i<sbx; i++) {
 						notesMap[(x+i) + (y+j)*sensorWidth] = nb;

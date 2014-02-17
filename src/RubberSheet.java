@@ -5,6 +5,7 @@ import util.Effects;
 import util.ForceImage;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 import com.tactonic.api.Tactonic;
 import com.tactonic.api.TactonicDevice;
@@ -29,9 +30,12 @@ public class RubberSheet extends RenderApplet implements TactonicFrameListener {
 	int S = 4; // SCALE UP FACTOR FOR MESH RESOLUTION.
 	int W = S*32;
 	int H = S*32;
-	double unitForce = -0.00005 / S / N;
+	double unitForce = -0.00002 / S / N;
 	boolean start = false, isSpacePressed = false;
 	int row0 = 0, col0 = 0, row1 = 0, col1 = 0, mouseX = -1, mouseY = -1;
+	
+	// Bouncing balls
+	ArrayList<Ball> balls;
 	
 	// MIDI stuff
 	MusicController music;
@@ -83,6 +87,19 @@ public class RubberSheet extends RenderApplet implements TactonicFrameListener {
 		floor.getMatrix().translate(0, 0, -.05).scale(1, 1, .001);
 		floor.isVisible = false;
 
+		// init with random bouncing balls
+		balls = new ArrayList<Ball>();
+		for (int i=0; i<5; i++)
+		{
+			int ix = (int)(Math.random() * W);
+			int iy = (int)(Math.random() * H);
+			float x = (float)sheet.vertices[ix + iy*W][0]*20;
+			float y = (float)sheet.vertices[ix + iy*W][1]*20;
+			Ball b = new Ball(x, y, ix + iy*W);
+			balls.add(b);
+			getWorld().add(b);
+		}
+		
 		// Music
 		music = new MusicController(TW, TH);
 		
@@ -137,7 +154,7 @@ public class RubberSheet extends RenderApplet implements TactonicFrameListener {
     
     int F(int x, int y) { 
 //    	return y >= TH ? 0 : forceImage2[x + TW * y];
-    	return forceImage2[x + TW * (y/2)];//TH/TW];
+    	return forceImage2[x + TW * (y/2)];
     }
     double lerp(double t, double a, double b) { return a + t * (b - a); }
     
@@ -186,6 +203,12 @@ public class RubberSheet extends RenderApplet implements TactonicFrameListener {
 		
 		sheet.computeSurfaceNormals();
 		
+		// bouncing balls
+		for (Ball ball : balls) {
+			ball.update(sheet);
+		}
+		
+		// music
 		music.processFrame(forceImage1);
 
 		if (frame == null)
