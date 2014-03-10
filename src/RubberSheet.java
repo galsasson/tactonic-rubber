@@ -25,12 +25,12 @@ public class RubberSheet extends RenderApplet implements TactonicFrameListener {
 	int[] forceImage2;
 	int p, xPrev = -1000, yPrev = 0;
 	double buf[][][];
-    int TW=32, TH=16;
+    int TW=72, TH=72;
 	int N = 2; // NUMBER OF WAVE PROPAGATION ITERATIONS PER FRAME.
-	int S = 4; // SCALE UP FACTOR FOR MESH RESOLUTION.
-	int W = S*32;
-	int H = S*32;
-	double unitForce = -0.00002 / S / N;
+	int S = 2; // SCALE UP FACTOR FOR MESH RESOLUTION.
+	int W = S*72;
+	int H = S*72;
+	double unitForce = -0.00005 / S / N;
 	boolean start = false, isSpacePressed = false;
 	int row0 = 0, col0 = 0, row1 = 0, col1 = 0, mouseX = -1, mouseY = -1;
 	
@@ -89,10 +89,10 @@ public class RubberSheet extends RenderApplet implements TactonicFrameListener {
 
 		// init with random bouncing balls
 		balls = new ArrayList<Ball>();
-		for (int i=0; i<5; i++)
+		for (int i=0; i<10; i++)
 		{
-			int ix = (int)(Math.random() * W);
-			int iy = (int)(Math.random() * H);
+			int ix = 3 + (int)(Math.random() * (W-6));
+			int iy = 3 + (int)(Math.random() * (H-6));
 			float x = (float)sheet.vertices[ix + iy*W][0]*20;
 			float y = (float)sheet.vertices[ix + iy*W][1]*20;
 			Ball b = new Ball(x, y, ix + iy*W);
@@ -153,8 +153,8 @@ public class RubberSheet extends RenderApplet implements TactonicFrameListener {
     }
     
     int F(int x, int y) { 
-//    	return y >= TH ? 0 : forceImage2[x + TW * y];
-    	return forceImage2[x + TW * (y/2)];
+    	return y >= TH ? 0 : forceImage2[x + TW * y];
+//    	return forceImage2[x + TW * (y/2)];
     }
     double lerp(double t, double a, double b) { return a + t * (b - a); }
     

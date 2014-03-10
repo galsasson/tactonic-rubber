@@ -26,8 +26,11 @@ public class MusicController {
 		// define a square of note triggers
 //		int[] scale = {60, 62, 64, 65, 67, 69, 71, 72, 74};	// C Major
 		int[] scale = {60, 62, 64, 67, 69};	// Pentatonic
-		createInstrument(0, 0, 2, 3, 10, 1, scale, 0);
-		createInstrument(0, 10, 2, 3, 10, 1, scale, 1);
+		createInstrument(0, 0, 12, 12, 6, 2, scale, 0, 0);
+		createInstrument(0, 48, 12, 12, 6, 2, scale, 1, 0);
+		
+		int[] drumsScale = {60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76};		
+		createInstrument(48, 12, 12, 12, 2, 5, scale, 2, 0);
 	}
 	
 	/* createSquareInstrument
@@ -36,12 +39,12 @@ public class MusicController {
 	 * sbx, sby = size of each note box
 	 * nbx, nby = number of note boxes per x and y 
 	 */
-	public void createInstrument(int _x, int _y, int sbx, int sby, int nbx, int nby, int[] scale, int channel)
+	public void createInstrument(int _x, int _y, int sbx, int sby, int nbx, int nby, int[] scale, int channel, int baseOctave)
 	{
 		int w = sbx*nbx;
 		int h = sby*nby;
 		int scaleIndex = 0;
-		int octave = 0;
+		int octave = baseOctave;
 		for (int y=_y; y<_y+h; y+=sby) {
 			for (int x=_x; x<_x+w; x+=sbx) {
 				NoteBox nb = new NoteBox(channel, scale[scaleIndex++] + octave*12);
@@ -77,7 +80,7 @@ public class MusicController {
 					nb.isDown = true;
 					if (!nb.isPlaying) {
 						nb.isPlaying = true;
-						midiSender.sendNoteOn(nb.channel, nb.pitch, (int)map(forces[i], THRESHOLD, MAX_FORCE, 0, 127));
+						midiSender.sendNoteOn(nb.channel, nb.pitch, 127);//(int)map(forces[i], THRESHOLD, MAX_FORCE, 0, 127));
 					}
 				}
 			}

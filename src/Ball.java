@@ -19,7 +19,7 @@ public class Ball extends Geometry {
 		ballMaterial.setAmbient(0.04, 0.02, 0.02);
 		ballMaterial.setDiffuse(0.02, 0.01, 0.01);
 		ballMaterial.setSpecular(0.8, 0.4, 0.4, 10);
-		ballMaterial.setDoubleSided(true);
+		ballMaterial.setDoubleSided(false);
 
         sphere(10);
         getMatrix().scale(SCALE).translate(x, y, Z_INIT);
@@ -36,29 +36,6 @@ public class Ball extends Geometry {
         vel += acc;
         getMatrix().translate(0, 0, vel);
         
-        vel *= 0.95f;
+        vel *= 0.97f;
     }
-
-//    public void setPosition(double x, double y) {
-//        getMatrix().identity();
-//        getMatrix().scale(0.1).translate(x, y, Z_INIT);
-//    }
-
-//    public void startAnimation(double x, double y) {
-//        setPosition(x, y);
-//        startAnimation();
-//    }
-
-//    public void startAnimation() {
-//        isVisible = true;
-//        velocity = V_INIT;
-//        animate = true; 
-//        startTime = new Date().getTime();
-//    }
-
-//    public void reset() {
-//        isVisible = false;
-//        velocity = 0;
-//        animate = false;
-//    }
 }
